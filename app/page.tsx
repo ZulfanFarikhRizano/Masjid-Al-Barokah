@@ -45,10 +45,17 @@ export default function HomePage() {
     (acc, k) => acc + (k.kategori === "Pemasukan" ? k.nominal : -k.nominal),
     0
   );
+  const pemasukan = kas
+    .filter((k) => k.kategori === "Pemasukan")
+    .reduce((a, b) => a + b.nominal, 0);
+  const pengeluaran = kas
+    .filter((k) => k.kategori === "Pengeluaran")
+    .reduce((a, b) => a + b.nominal, 0);
+
   const warta = getWarta().slice(0, 2);
 
   return (
-    <div className="mx-auto max-w-6xl px-5 py-10 sm:py-14">
+    <div className="mx-auto max-w-6xl px-4 py-8 sm:px-5 sm:py-14">
       {/* Hero */}
       <section className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr] lg:items-start">
         <div>
@@ -69,28 +76,24 @@ export default function HomePage() {
             </Button>
           </div>
 
-          {/* Ringkasan kas — ringkas, tanpa tabel besar di beranda */}
-          <div className="mt-8 grid grid-cols-3 gap-3">
-            <Card className="p-4">
-              <p className="text-xs text-foreground/50">Saldo Kas</p>
-              <p className="tabular mt-1 text-lg font-bold text-primary-700">
+          {/* Ringkasan kas — diperbaiki agar tidak overflow di layar HP */}
+          <div className="mt-8 grid grid-cols-1 gap-2.5 min-[380px]:grid-cols-3 sm:gap-3">
+            <Card className="p-3 sm:p-4">
+              <p className="text-xs font-medium text-foreground/50">Saldo Kas</p>
+              <p className="tabular mt-1 truncate text-sm font-bold text-primary-700 sm:text-base md:text-lg">
                 {formatRupiah(saldo)}
               </p>
             </Card>
-            <Card className="p-4">
-              <p className="text-xs text-foreground/50">Pemasukan</p>
-              <p className="tabular mt-1 text-lg font-bold text-foreground">
-                {formatRupiah(
-                  kas.filter((k) => k.kategori === "Pemasukan").reduce((a, b) => a + b.nominal, 0)
-                )}
+            <Card className="p-3 sm:p-4">
+              <p className="text-xs font-medium text-foreground/50">Pemasukan</p>
+              <p className="tabular mt-1 truncate text-sm font-bold text-foreground sm:text-base md:text-lg">
+                {formatRupiah(pemasukan)}
               </p>
             </Card>
-            <Card className="p-4">
-              <p className="text-xs text-foreground/50">Pengeluaran</p>
-              <p className="tabular mt-1 text-lg font-bold text-foreground">
-                {formatRupiah(
-                  kas.filter((k) => k.kategori === "Pengeluaran").reduce((a, b) => a + b.nominal, 0)
-                )}
+            <Card className="p-3 sm:p-4">
+              <p className="text-xs font-medium text-foreground/50">Pengeluaran</p>
+              <p className="tabular mt-1 truncate text-sm font-bold text-foreground sm:text-base md:text-lg">
+                {formatRupiah(pengeluaran)}
               </p>
             </Card>
           </div>
@@ -120,7 +123,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Pengajian terdekat — dimuat async, contoh skeleton loading state */}
+      {/* Pengajian terdekat */}
       <section className="mt-16">
         <div className="mb-5 flex items-end justify-between">
           <h2 className="text-lg font-bold text-primary-900">Pengajian Terdekat</h2>
@@ -137,7 +140,7 @@ export default function HomePage() {
         </Suspense>
       </section>
 
-      {/* Info terbaru — pengganti banner berjalan: daftar tenang, tidak mencolok */}
+      {/* Info terbaru */}
       <section className="mt-16">
         <div className="mb-5 flex items-end justify-between">
           <h2 className="text-lg font-bold text-primary-900">Info Terbaru</h2>
