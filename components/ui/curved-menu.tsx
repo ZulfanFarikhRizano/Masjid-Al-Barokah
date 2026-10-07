@@ -177,19 +177,8 @@ const CurvedNavbar: React.FC<iCurvedNavbarProps & { footer?: React.ReactNode }> 
       className="fixed right-0 top-0 z-40 h-[100dvh] w-[78vw] border-l border-border bg-background shadow-2xl sm:w-[380px]"
     >
       <div className="flex h-full flex-col justify-between overflow-y-auto pt-11">
-        <div className="relative mt-0 flex flex-col gap-3 px-8 text-5xl md:px-20">
-          <button
-            type="button"
-            onClick={() => setIsActive(false)}
-            aria-label="Tutup menu navigasi"
-            className="absolute right-0 top-0 flex h-9 w-9 items-center justify-center rounded-full border border-border bg-background text-foreground hover:bg-muted"
-          >
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <line x1="6" y1="6" x2="18" y2="18" />
-              <line x1="18" y1="6" x2="6" y2="18" />
-            </svg>
-          </button>
-          <div className="mb-1 border-b border-foreground/15 pb-2 pr-12 text-sm uppercase text-foreground/50">
+        <div className="mt-0 flex flex-col gap-3 px-8 text-5xl md:px-20">
+          <div className="mb-1 border-b border-foreground/15 pb-2 text-sm uppercase text-foreground/50">
             <p>Navigasi</p>
           </div>
           <section className="mt-0 bg-transparent">

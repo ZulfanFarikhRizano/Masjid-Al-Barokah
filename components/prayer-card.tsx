@@ -38,8 +38,7 @@ function formatTanggalHariIni() {
   }).format(new Date());
 }
 
-// Ambil jadwal sholat ASLI hari ini dari Aladhan API — method=20 artinya
-// metode perhitungan Kementerian Agama RI, dihitung dari koordinat masjid.
+// Ambil jadwal sholat ASLI hari ini dari Aladhan API
 async function fetchJadwalSholat(): Promise<WaktuSholat[]> {
   const now = new Date();
   const tanggalUrl = [
@@ -55,7 +54,6 @@ async function fetchJadwalSholat(): Promise<WaktuSholat[]> {
   const t = json?.data?.timings;
   if (!t) throw new Error('Format respons API tidak sesuai');
 
-  // API kadang membalas "04:32 (WIB)" — ambil 5 karakter jam:menit saja.
   const bersihkan = (s: string) => s.slice(0, 5);
 
   return [
@@ -74,8 +72,6 @@ export function PrayerCard() {
   const [sisa, setSisa] = useState<{ nama: string; sisaDetik: number } | null>(null);
   const [tanggalHariIni, setTanggalHariIni] = useState<string | null>(null);
 
-  // Ambil jadwal sholat asli sekali saat kartu dibuka — otomatis jatuh ke
-  // jadwal cadangan statis kalau API gagal/tidak ada internet.
   useEffect(() => {
     let batal = false;
     fetchJadwalSholat()
@@ -96,7 +92,6 @@ export function PrayerCard() {
     };
   }, []);
 
-  // Countdown + tanggal jalan tiap detik, begitu jadwalnya sudah didapat.
   useEffect(() => {
     if (!waktu) return;
     setSisa(cariSholatBerikutnya(waktu));
@@ -158,18 +153,34 @@ export function PrayerCard() {
         </>
       )}
 
+      {/* Button Switch Notifikasi Azan */}
       <button
         type="button"
-        aria-pressed={azanAktif}
+        role="switch"
+        aria-checked={azanAktif}
         onClick={() => setAzanAktif((v) => !v)}
-        className="mt-4 flex w-full items-center justify-between rounded-xl border border-border bg-muted px-3.5 py-2.5 text-sm font-semibold"
+        className="mt-4 flex w-full items-center justify-between rounded-2xl border border-border bg-muted/50 px-4 py-3 text-sm font-semibold transition-colors hover:bg-muted"
       >
-        <span className="flex items-center gap-2">
-          {azanAktif ? <Bell size={15} className="text-primary-700" /> : <BellOff size={15} className="text-foreground/40" />}
+        <span className="flex items-center gap-2.5 text-foreground">
+          {azanAktif ? (
+            <Bell size={17} className="text-emerald-600" />
+          ) : (
+            <BellOff size={17} className="text-foreground/40" />
+          )}
           Notifikasi suara Azan
         </span>
-        <span className={`relative h-5 w-9 rounded-full transition-colors ${azanAktif ? 'bg-primary-600' : 'bg-border'}`}>
-          <span className={`absolute top-0.5 h-4 w-4 rounded-full bg-white transition-transform ${azanAktif ? 'translate-x-[18px]' : 'translate-x-0.5'}`} />
+
+        {/* Toggle Capsule */}
+        <span
+          className={`relative inline-flex h-6 w-11 flex-shrink-0 items-center rounded-full p-0.5 transition-colors duration-200 ease-in-out ${
+            azanAktif ? 'bg-emerald-600' : 'bg-gray-300 dark:bg-gray-700'
+          }`}
+        >
+          <span
+            className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-sm ring-0 transition duration-200 ease-in-out ${
+              azanAktif ? 'translate-x-5' : 'translate-x-0'
+            }`}
+          />
         </span>
       </button>
     </Card>

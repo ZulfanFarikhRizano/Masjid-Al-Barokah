@@ -1,5 +1,7 @@
 import Link from 'next/link';
 import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { LogOut } from 'lucide-react';
 import { formatRupiah } from '@/lib/utils';
 import {
   getKas,
@@ -29,8 +31,18 @@ export default function AdminDashboard() {
 
   return (
     <div>
-      <h1 className="mb-6 text-xl font-extrabold text-primary-900">Dashboard</h1>
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+      {/* Header + Tombol Logout */}
+      <div className="mb-6 flex items-center justify-between">
+        <h1 className="text-xl font-extrabold text-primary-900">Dashboard</h1>
+        <Link href="/admin/login">
+          <Button variant="outline" className="flex items-center gap-2 border-red-200 px-3 py-1.5 text-xs text-red-600 hover:bg-red-50 hover:text-red-700 dark:border-red-900/50 dark:text-red-400 dark:hover:bg-red-950/40">
+            <LogOut size={14} />
+            <span>Logout</span>
+          </Button>
+        </Link>
+      </div>
+
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
         {stats.map((s) => (
           <Link key={s.label} href={s.href}>
             <Card className="p-4 transition-colors hover:border-primary-400">
